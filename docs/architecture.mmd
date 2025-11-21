@@ -1,0 +1,91 @@
+graph TB
+    subgraph "User Layer"
+        Player[👤 Player]
+    end
+
+    subgraph "Godot Game Engine"
+        subgraph "UI Layer"
+            DialogueUI[🎨 Dialogue UI<br/>dialogue_ui.gd]
+        end
+        
+        subgraph "Core Systems"
+            GameManager[🎮 Game Manager<br/>game_manager.gd<br/><br/>• Story progression<br/>• State management<br/>• Skill checks<br/>• Save/Load]
+        end
+        
+        subgraph "Import System"
+            StoryImporter[📥 Story Importer<br/>story_importer.gd<br/><br/>• Parse JSON<br/>• Convert nodes<br/>• Apply effects<br/>• Check conditions]
+        end
+        
+        subgraph "AI Integration"
+            AIClient[🤖 AI Client<br/>ai_client.gd<br/><br/>• HTTP requests<br/>• Text generation<br/>• Image generation<br/>• Asset caching]
+        end
+        
+        subgraph "Media System"
+            MediaManager[🎬 Media Manager<br/>media_manager.gd<br/><br/>• Portrait loading<br/>• Background loading<br/>• Music playback<br/>• Sound effects]
+        end
+    end
+
+    subgraph "Local Storage"
+        DemoJSON[📄 stories/demo.json<br/><br/>StoryBlocks JSON:<br/>• Nodes<br/>• Choices<br/>• Conditions<br/>• Effects]
+        
+        Assets[🖼️ assets/<br/><br/>• portraits/<br/>• backgrounds/<br/>• audio/music/<br/>• audio/sfx/]
+    end
+
+    subgraph "External Services"
+        FlaskProxy[🌐 Flask API Proxy<br/>api_proxy.py<br/><br/>localhost:5000]
+        
+        xAI[☁️ xAI API<br/><br/>Grok-3 text<br/>Grok-2-image]
+    end
+
+    %% User interactions
+    Player -->|Clicks choices| DialogueUI
+    DialogueUI -->|Displays story| Player
+
+    %% UI to Core
+    DialogueUI -->|Load story| GameManager
+    DialogueUI -->|Select choice| GameManager
+    DialogueUI -->|Request assets| MediaManager
+
+    %% Core to Import
+    GameManager -->|Import story| StoryImporter
+    StoryImporter -->|Read JSON| DemoJSON
+    StoryImporter -->|Return converted| GameManager
+
+    %% Core to AI
+    GameManager -->|Enhance text| AIClient
+    AIClient -->|Generated text| GameManager
+
+    %% Media to AI
+    MediaManager -->|Generate portrait| AIClient
+    MediaManager -->|Generate background| AIClient
+    AIClient -->|Image URL/path| MediaManager
+
+    %% Media to Assets
+    MediaManager -->|Load files| Assets
+    Assets -->|Textures/Audio| MediaManager
+    MediaManager -->|Display/Play| DialogueUI
+
+    %% AI to Flask
+    AIClient -->|HTTP POST| FlaskProxy
+    FlaskProxy -->|API call| xAI
+    xAI -->|Response| FlaskProxy
+    FlaskProxy -->|JSON response| AIClient
+
+    %% Styling
+    classDef uiClass fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    classDef coreClass fill:#7B68EE,stroke:#5A4FCF,stroke-width:2px,color:#fff
+    classDef importClass fill:#50C878,stroke:#3AA05E,stroke-width:2px,color:#fff
+    classDef aiClass fill:#FF6B6B,stroke:#E85555,stroke-width:2px,color:#fff
+    classDef mediaClass fill:#FFA500,stroke:#E69500,stroke-width:2px,color:#fff
+    classDef storageClass fill:#95A5A6,stroke:#7F8C8D,stroke-width:2px,color:#fff
+    classDef externalClass fill:#E74C3C,stroke:#C0392B,stroke-width:2px,color:#fff
+    classDef playerClass fill:#2ECC71,stroke:#27AE60,stroke-width:3px,color:#fff
+
+    class DialogueUI uiClass
+    class GameManager coreClass
+    class StoryImporter importClass
+    class AIClient aiClass
+    class MediaManager mediaClass
+    class DemoJSON,Assets storageClass
+    class FlaskProxy,xAI externalClass
+    class Player playerClass

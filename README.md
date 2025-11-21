@@ -2,7 +2,11 @@
 
 ## Overview
 
-This is a working prototype that integrates your **StoryBlocks** AI-powered narrative system with **Godot Engine**, creating a native game experience with:
+This is a working prototype that integrates your **StoryBlocks** AI-powered narrative system with **Godot Engine**.
+
+**📊 [View Architecture Diagram](ARCHITECTURE.md)**
+
+Creating a native game experience with:
 
 - ✅ **StoryBlocks JSON import** - Loads your existing stories
 - ✅ **AI integration** - Connects to Flask proxy for runtime content generation
