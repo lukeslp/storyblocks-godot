@@ -1,0 +1,443 @@
+{
+  "title": "The Mysterious Forest",
+  "author": "Demo Author",
+  "version": "1.0",
+  "description": "A simple demo adventure to test StoryBlocks functionality.",
+  "startNode": "start",
+  "genre": "fantasy adventure",
+  "estimatedPlayTime": "10-15 minutes",
+  "initialState": {
+    "variables": {
+      "playerName": "Adventurer"
+    },
+    "stats": {
+      "health": 100,
+      "courage": 50,
+      "wisdom": 50
+    },
+    "inventory": ["map", "compass"],
+    "relationships": {},
+    "flags": {}
+  },
+  "metadata": {
+    "aiIntegration": false,
+    "imageGeneration": false,
+    "characterDriven": false,
+    "multipleEndings": 2,
+    "keyFeatures": [
+      "Simple branching narrative",
+      "Basic stat effects",
+      "Conditional choices",
+      "Multiple paths to completion"
+    ]
+  },
+  "nodes": {
+    "start": {
+      "type": "story",
+      "title": "The Edge of the Forest",
+      "text": "You stand at the edge of a mysterious forest. The ancient trees tower above you, their branches creating a canopy so thick that only scattered beams of sunlight penetrate to the forest floor.\n\nYour quest to find the Lost Temple of Wisdom begins here. According to the map in your possession, the temple lies somewhere deep within these woods.\n\nWhat do you do?",
+      "choices": [
+        {
+          "text": "Enter the forest following the main path",
+          "next": "main_path",
+          "effects": [
+            {
+              "type": "modifyState",
+              "variable": "stats.courage",
+              "operation": "add",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "text": "Search for an alternate route around the edge",
+          "next": "edge_path",
+          "effects": [
+            {
+              "type": "modifyState",
+              "variable": "stats.wisdom",
+              "operation": "add",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "text": "Study your map more carefully first",
+          "next": "study_map"
+        }
+      ]
+    },
+    "main_path": {
+      "type": "story",
+      "title": "The Main Path",
+      "text": "You stride confidently down the main path. The forest seems to close in around you as you venture deeper. Strange sounds echo through the trees - birds you've never heard before, and perhaps... something else?\n\nAfter walking for what feels like hours, you come to a fork in the path.",
+      "choices": [
+        {
+          "text": "Take the left path toward the sound of water",
+          "next": "river",
+          "effects": [
+            {
+              "type": "setFlag",
+              "flag": "found_river",
+              "value": true
+            }
+          ]
+        },
+        {
+          "text": "Take the right path following mysterious symbols on the trees",
+          "next": "symbols",
+          "condition": "stats.wisdom >= 50"
+        },
+        {
+          "text": "Continue straight ahead",
+          "next": "deep_forest"
+        }
+      ]
+    },
+    "edge_path": {
+      "type": "story",
+      "title": "Along the Edge",
+      "text": "You decide to be cautious and follow the edge of the forest. The going is slower, but you feel safer with the open field on one side.\n\nAs you walk, you notice a small shrine partially hidden by overgrowth.",
+      "choices": [
+        {
+          "text": "Investigate the shrine",
+          "next": "shrine",
+          "effects": [
+            {
+              "type": "modifyState",
+              "variable": "stats.wisdom",
+              "operation": "add",
+              "value": 10
+            }
+          ]
+        },
+        {
+          "text": "Continue along the edge",
+          "next": "edge_continue"
+        }
+      ]
+    },
+    "study_map": {
+      "type": "story",
+      "title": "Careful Study",
+      "text": "You unfold your map and study it carefully. The parchment is old and some parts are faded, but you can make out several landmarks:\n\n- A river running through the forest\n- An old shrine at the forest's edge\n- Mysterious symbols that might mark the way\n\nArmed with this knowledge, you feel more prepared.",
+      "effects": [
+        {
+          "type": "modifyState",
+          "variable": "stats.wisdom",
+          "operation": "add",
+          "value": 10
+        },
+        {
+          "type": "setFlag",
+          "flag": "studied_map",
+          "value": true
+        }
+      ],
+      "choices": [
+        {
+          "text": "Enter the forest via the main path",
+          "next": "main_path"
+        },
+        {
+          "text": "Look for the shrine mentioned on the map",
+          "next": "edge_path"
+        }
+      ]
+    },
+    "river": {
+      "type": "story",
+      "title": "The Crystal River",
+      "text": "You follow the sound of rushing water and soon come upon a crystal-clear river. The water looks refreshing, and you notice a small boat tied to a tree on the bank.\n\nAcross the river, you can see what might be a path continuing deeper into the forest.",
+      "choices": [
+        {
+          "text": "Use the boat to cross the river",
+          "next": "boat_crossing"
+        },
+        {
+          "text": "Follow the river upstream",
+          "next": "upstream"
+        },
+        {
+          "text": "Rest by the river and refill your water",
+          "next": "rest_river",
+          "effects": [
+            {
+              "type": "modifyState",
+              "variable": "stats.health",
+              "operation": "add",
+              "value": 20
+            }
+          ]
+        }
+      ]
+    },
+    "symbols": {
+      "type": "story",
+      "title": "Following the Symbols",
+      "text": "Your wisdom serves you well - you recognize these symbols from ancient texts. They're waymarkers, used by the temple's builders to guide pilgrims.\n\nFollowing the symbols leads you deeper into the forest, but you feel confident you're on the right path.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "following_symbols",
+          "value": true
+        }
+      ],
+      "next": "temple_approach"
+    },
+    "temple_approach": {
+      "type": "story",
+      "title": "The Temple Revealed",
+      "text": "The symbols have led you true! Through the trees ahead, you glimpse ancient stone architecture. The Lost Temple of Wisdom stands before you, covered in vines but still majestic.\n\nYou've found it! But the real challenge may be what lies within...",
+      "type": "ending",
+      "choices": [
+        {
+          "text": "Enter the temple",
+          "next": "temple_interior"
+        }
+      ]
+    },
+    "temple_interior": {
+      "type": "ending",
+      "title": "To Be Continued...",
+      "text": "To be continued...\n\nThis demo story ends here, but in the full StoryBlocks, your adventure would continue with puzzles, challenges, and ancient wisdom to discover!\n\nThank you for playing the demo!",
+      "endingType": "success"
+    },
+    "deep_forest": {
+      "type": "story",
+      "title": "Lost in the Woods",
+      "text": "You push deeper into the forest. The path becomes less distinct, and you realize you might be getting lost. The canopy overhead is so thick that you can barely tell what time of day it is.",
+      "choices": [
+        {
+          "text": "Try to find your way back",
+          "next": "lost"
+        },
+        {
+          "text": "Press on with determination",
+          "next": "wandering",
+          "condition": "stats.courage >= 55"
+        },
+        {
+          "text": "Climb a tree to get your bearings",
+          "next": "climb_tree"
+        }
+      ]
+    },
+    "shrine": {
+      "type": "story",
+      "title": "The Ancient Shrine",
+      "text": "The shrine is ancient but well-preserved. As you clear away some of the overgrowth, you discover an inscription that seems to be a riddle about the temple's location.\n\nYou also find a small offering box with a few coins inside.",
+      "effects": [
+        {
+          "type": "addInventory",
+          "item": "ancient coins"
+        },
+        {
+          "type": "setFlag",
+          "flag": "found_shrine",
+          "value": true
+        }
+      ],
+      "choices": [
+        {
+          "text": "Solve the riddle",
+          "next": "riddle",
+          "condition": "stats.wisdom >= 60"
+        },
+        {
+          "text": "Take the coins and continue",
+          "next": "edge_continue"
+        },
+        {
+          "text": "Leave an offering of your own",
+          "next": "offering"
+        }
+      ]
+    },
+    "lost": {
+      "type": "story",
+      "title": "Hopelessly Lost",
+      "text": "You try to retrace your steps but everything looks the same. You're definitely lost now. As panic starts to set in, you need to make a decision.",
+      "effects": [
+        {
+          "type": "modifyState",
+          "variable": "stats.courage",
+          "operation": "subtract",
+          "value": 10
+        }
+      ],
+      "choices": [
+        {
+          "text": "Stay calm and use your compass",
+          "next": "use_compass",
+          "condition": "inventory.includes('compass')"
+        },
+        {
+          "text": "Shout for help",
+          "next": "shout_help"
+        },
+        {
+          "text": "Find a safe place to rest and think",
+          "next": "rest_lost"
+        }
+      ]
+    },
+    "use_compass": {
+      "type": "story",
+      "title": "Saved by Preparation",
+      "text": "Your trusty compass helps you get your bearings. You're not as lost as you thought! With renewed confidence, you pick a direction and stick to it.\n\nEventually, you find yourself back on a recognizable path.",
+      "effects": [
+        {
+          "type": "modifyState",
+          "variable": "stats.wisdom",
+          "operation": "add",
+          "value": 15
+        }
+      ],
+      "next": "main_path"
+    },
+    "boat_crossing": {
+      "type": "story",
+      "title": "Across the River",
+      "text": "You untie the boat and push off from the shore. The river is calm here, and you make it across easily. On the far bank, you discover the path continues, marked by the same mysterious symbols you saw earlier.\n\nIt seems someone wanted to make sure travelers could find their way.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "crossed_river",
+          "value": true
+        }
+      ],
+      "next": "symbols"
+    },
+    "wandering": {
+      "type": "story",
+      "title": "Courage Rewarded",
+      "text": "Your courage drives you forward through the trackless forest. Just when you think you're hopelessly lost, you stumble upon an ancient stone marker. It's covered in symbols that seem to point the way forward.",
+      "next": "symbols"
+    },
+    "riddle": {
+      "type": "story",
+      "title": "The Riddle Solved",
+      "text": "The riddle reads: 'Where water meets wisdom, and courage shows the way, the temple awaits those who persist through the day.'\n\nYou realize it's telling you to find where the river meets the marked path! With this knowledge, you set off with renewed purpose.",
+      "next": "temple_approach"
+    },
+    "offering": {
+      "type": "story",
+      "title": "A Blessing Received",
+      "text": "You place some of your supplies at the shrine as an offering. Suddenly, the air shimmers and you feel a warm presence. A blessing has been placed upon you!\n\nYou feel more capable and ready to face whatever challenges await.",
+      "effects": [
+        {
+          "type": "modifyState",
+          "variable": "stats.health",
+          "operation": "add",
+          "value": 50
+        },
+        {
+          "type": "modifyState",
+          "variable": "stats.wisdom",
+          "operation": "add",
+          "value": 20
+        },
+        {
+          "type": "modifyState",
+          "variable": "stats.courage",
+          "operation": "add",
+          "value": 20
+        }
+      ],
+      "next": "edge_continue"
+    },
+    "edge_continue": {
+      "type": "story",
+      "title": "Continuing the Journey",
+      "text": "You continue along the forest's edge. Eventually, you find a path that leads into the forest proper. With your increased knowledge and preparation, you feel ready to venture in.",
+      "next": "main_path"
+    },
+    "upstream": {
+      "type": "story",
+      "title": "The Spring",
+      "text": "Following the river upstream, you discover it originates from a spring near some ancient ruins. Could this be related to the temple you seek?",
+      "choices": [
+        {
+          "text": "Investigate the ruins",
+          "next": "temple_approach"
+        },
+        {
+          "text": "Return to the crossing point",
+          "next": "river"
+        }
+      ]
+    },
+    "rest_river": {
+      "type": "story",
+      "title": "Peaceful Rest",
+      "text": "You take a moment to rest by the river, drinking the clear water and washing your face. The peaceful setting helps restore your energy and calm your mind.",
+      "next": "river"
+    },
+    "climb_tree": {
+      "type": "story",
+      "title": "A View From Above",
+      "text": "You climb the tallest tree you can find. From the top, you can see the forest stretching in all directions. But wait - there! In the distance, you spot stone structures rising above the canopy.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "saw_temple",
+          "value": true
+        }
+      ],
+      "choices": [
+        {
+          "text": "Head directly toward the temple",
+          "next": "temple_approach"
+        },
+        {
+          "text": "Climb down and find a proper path",
+          "next": "main_path"
+        }
+      ]
+    },
+    "shout_help": {
+      "type": "story",
+      "title": "The Hermit",
+      "text": "Your shouts echo through the forest. After a moment, you hear a response! A hermit emerges from the undergrowth. He looks at you with kind eyes and offers to guide you to safety.",
+      "choices": [
+        {
+          "text": "Accept his help gratefully",
+          "next": "hermit_help"
+        },
+        {
+          "text": "Politely decline and continue alone",
+          "next": "wandering"
+        }
+      ]
+    },
+    "hermit_help": {
+      "type": "story",
+      "title": "Guided by Wisdom",
+      "text": "The hermit leads you through hidden paths with ease. As you walk, he tells you he once sought the temple himself. He couldn't find it, but he shares what wisdom he gained from the search.\n\nHe leaves you at a crossroads, pointing toward where he believes the temple might be.",
+      "effects": [
+        {
+          "type": "modifyState",
+          "variable": "stats.wisdom",
+          "operation": "add",
+          "value": 25
+        }
+      ],
+      "next": "main_path"
+    },
+    "rest_lost": {
+      "type": "story",
+      "title": "Clarity Through Rest",
+      "text": "You find a sheltered spot and sit down to think. As you calm your mind, you remember the lessons from the map and what you've learned so far. With a clearer head, you notice subtle signs of a path nearby.",
+      "effects": [
+        {
+          "type": "modifyState",
+          "variable": "stats.courage",
+          "operation": "add",
+          "value": 5
+        }
+      ],
+      "next": "main_path"
+    }
+  }
+}
